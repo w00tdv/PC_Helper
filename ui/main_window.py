@@ -5,6 +5,7 @@ from ui.glass_card import GlassCard
 from ui.header_widget import HeaderWidget
 from ui.styles import DARK, LIGHT
 from ui.animated_background import AnimatedBackground
+from services.routine_alerts import RoutineAlerts
 
 
 class MainWindow(QMainWindow):
@@ -21,19 +22,35 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.apply_theme()
 
+        self.alerts = RoutineAlerts(self)
+
     def init_ui(self):
 
         root = QVBoxLayout()
         root.setAlignment(Qt.AlignTop)
 
-        header = HeaderWidget()
-        root.addWidget(header)
+        # верхний бар
+        top_bar = QHBoxLayout()
 
-        root.addSpacing(20)
+        self.header = HeaderWidget()
 
-        # контейнер для карточек
+        top_bar.addWidget(self.header)
+
+        top_bar.addStretch()
+
+        self.theme_btn = QPushButton("🌗")
+        self.theme_btn.setFixedSize(36, 36)
+
+        self.theme_btn.clicked.connect(self.toggle_theme)
+
+        top_bar.addWidget(self.theme_btn)
+
+        root.addLayout(top_bar)
+
+        root.addSpacing(30)
+
+        # карточки
         cards_container = QVBoxLayout()
-        cards_container.setAlignment(Qt.AlignTop)
 
         for module in self.modules:
 
@@ -54,13 +71,7 @@ class MainWindow(QMainWindow):
 
         root.addStretch()
 
-        theme_btn = QPushButton("Сменить тему")
-        theme_btn.clicked.connect(self.toggle_theme)
-
-        root.addWidget(theme_btn)
-
         bg = AnimatedBackground()
-
         bg.setLayout(root)
 
         self.setCentralWidget(bg)

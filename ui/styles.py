@@ -47,6 +47,22 @@ font-size:12px;
 color:rgba(255,255,255,0.7);
 }
 
+QPushButton{
+background:rgba(255,255,255,0.08);
+border-radius:10px;
+padding:6px;
+}
+
+QPushButton:hover{
+background:rgba(255,255,255,0.18);
+}
+
+#clockBox{
+background:rgba(255,255,255,0.08);
+border-radius:10px;
+font-size:16px;
+}
+
 """
 
 LIGHT = """
@@ -94,5 +110,22 @@ color:black;
 font-size:12px;
 color:#666;
 }
+
+QPushButton{
+background:white;
+border-radius:10px;
+padding:6px;
+}
+
+QPushButton:hover{
+background:#eeeeee;
+}
+
+#clockBox{
+background:white;
+border-radius:10px;
+font-size:16px;
+}
+
 
 """
