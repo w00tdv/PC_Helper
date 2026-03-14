@@ -9,12 +9,11 @@ class Module(BaseModule):
 
     name = "Очистка системы"
     description = "Удаляет временные файлы"
-    icon = "assets/icons/cleaner.svg"
+    icon = "🧹"
 
     def run(self):
 
         temp = tempfile.gettempdir()
-
         deleted = 0
 
         for file in os.listdir(temp):

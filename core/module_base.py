@@ -1,8 +1,8 @@
 class BaseModule:
 
     name = "Module"
-    description = "Module description"
-    icon = None
+    description = "Description"
+    icon = "⚙️"
 
     def run(self):
         pass

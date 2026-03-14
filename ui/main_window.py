@@ -2,6 +2,9 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 
 from ui.glass_card import GlassCard
+from ui.header_widget import HeaderWidget
+from ui.styles import DARK, LIGHT
+from ui.animated_background import AnimatedBackground
 
 
 class MainWindow(QMainWindow):
@@ -11,45 +14,71 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.modules = modules
+        self.dark = True
 
-        self.resize(900,600)
-
-        self.setWindowTitle("PC Helper")
+        self.resize(800, 600)
 
         self.init_ui()
+        self.apply_theme()
 
     def init_ui(self):
 
-        scroll = QScrollArea()
+        root = QVBoxLayout()
+        root.setAlignment(Qt.AlignTop)
 
-        container = QWidget()
-        layout = QVBoxLayout()
+        header = HeaderWidget()
+        root.addWidget(header)
 
-        title = QLabel("PC Helper")
-        title.setAlignment(Qt.AlignCenter)
-        title.setStyleSheet("font-size:32px;")
+        root.addSpacing(20)
 
-        layout.addWidget(title)
+        # контейнер для карточек
+        cards_container = QVBoxLayout()
+        cards_container.setAlignment(Qt.AlignTop)
 
         for module in self.modules:
 
             card = GlassCard(module)
 
+            card.setMaximumWidth(500)
+
             card.clicked.connect(lambda m=module: self.run_module(m))
 
-            layout.addWidget(card)
+            wrapper = QHBoxLayout()
+            wrapper.addStretch()
+            wrapper.addWidget(card)
+            wrapper.addStretch()
 
-        layout.addStretch()
+            cards_container.addLayout(wrapper)
 
-        container.setLayout(layout)
+        root.addLayout(cards_container)
 
-        scroll.setWidget(container)
-        scroll.setWidgetResizable(True)
+        root.addStretch()
 
-        self.setCentralWidget(scroll)
+        theme_btn = QPushButton("Сменить тему")
+        theme_btn.clicked.connect(self.toggle_theme)
+
+        root.addWidget(theme_btn)
+
+        bg = AnimatedBackground()
+
+        bg.setLayout(root)
+
+        self.setCentralWidget(bg)
 
     def run_module(self, module):
 
         result = module.run()
 
         QMessageBox.information(self, module.name, str(result))
+
+    def toggle_theme(self):
+
+        self.dark = not self.dark
+        self.apply_theme()
+
+    def apply_theme(self):
+
+        if self.dark:
+            self.setStyleSheet(DARK)
+        else:
+            self.setStyleSheet(LIGHT)
